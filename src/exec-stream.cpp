@@ -33,7 +33,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <exception>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__MSYS__)
 
 #define NOMINMAX
 #include <windows.h>

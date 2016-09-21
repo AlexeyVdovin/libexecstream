@@ -26,7 +26,7 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "exec-stream.h"
+#include "libexecstream/exec-stream.h"
 
 #include <vector>
 #include <list>
@@ -37,8 +37,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdio.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__MSYS__)
 
 #include <windows.h>
 
@@ -51,6 +52,10 @@ void sleep( int seconds )
 
 #include <unistd.h>
 
+#endif
+
+#ifndef CHAR_MAX
+#define CHAR_MAX    __SCHAR_MAX__
 #endif
 
 // class for collecting and printing test results
@@ -195,7 +200,7 @@ std::string random_string( std::size_t size )
 
 bool check_if_english_error_messages()
 {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__MSYS__)
     std::string s;
     LPVOID buf;
     if( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
@@ -478,7 +483,7 @@ int main( int argc, char ** argv )
             exec_stream_t exec_stream;
             exec_stream.set_binary_mode( exec_stream_t::s_out );
             exec_stream.start( program, "child helloworld" );
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__MSYS__)
             TEST( read_all( exec_stream.out() )=="hello\r\nworld" );
 #else
             TEST( read_all( exec_stream.out() )=="hello\nworld" );
