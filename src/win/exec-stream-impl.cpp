@@ -183,7 +183,7 @@ void exec_stream_t::start( std::string const & program, std::string const & argu
     si.cb=sizeof( si );
     PROCESS_INFORMATION pi;
     ZeroMemory( &pi, sizeof( pi ) );
-    if( !CreateProcess( 0, const_cast< char * >( command.c_str() ), 0, 0, TRUE, 0, env, 0, &si, &pi ) ) {
+    if( !CreateProcess( 0, const_cast< char * >( command.c_str() ), 0, 0, TRUE, CREATE_SUSPENDED, env, 0, &si, &pi ) ) {
         throw os_error_t( "exec_stream_t::start: CreateProcess failed.\n command line was: "+command );
     }
     
@@ -206,6 +206,9 @@ void exec_stream_t::start( std::string const & program, std::string const & argu
     m_impl->m_err_thread.start_reader_thread( m_impl->m_err_pipe );
 
     m_impl->m_in_thread.start_writer_thread( m_impl->m_in_pipe );
+
+    // Resume child process
+    ResumeThread(pi.hThread);
 }
 
 void exec_stream_t::start( std::string const & program, exec_stream_t::next_arg_t & next_arg, char * envp[] )
