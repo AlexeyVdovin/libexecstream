@@ -187,7 +187,7 @@ void exec_stream_t::start( std::string const & program, std::string const & argu
         throw os_error_t( "exec_stream_t::start: CreateProcess failed.\n command line was: "+command );
     }
     
-    if(env) delete[] env;
+    if(env) delete[] (char*)env;
 
     m_impl->m_child_process=pi.hProcess;
     
