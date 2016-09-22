@@ -4,7 +4,7 @@ srcdir=../src
 
 CC=g++
 
-CDEBUGFLAGS= -g -D _DEBUG
+CDEBUGFLAGS= -g -O0 -D _DEBUG
 
 CFLAGS= -I ../include -I ../../include -Wall $(CDEBUGFLAGS)
 
@@ -14,8 +14,8 @@ $(builddir)/exec-stream.o : $(srcdir)/exec-stream.cpp
 	$(CC) -c $(CFLAGS) -o $(builddir)/exec-stream.o $(srcdir)/exec-stream.cpp
 
 $(builddir)/exec-stream-test.o : ./exec-stream-test.cpp
-	$(CC) -c $(CFLAGS) -o $(builddir)/exec-stream-test.o ./exec-stream-test.cpp
+	$(CC) -c $(CFLAGS) -o $(builddir)/exec-stream-test.o -pthread ./exec-stream-test.cpp
 
 $(builddir)/exec-stream-test : $(builddir)/exec-stream.o $(builddir)/exec-stream-test.o
-	$(CC) $(CFLAGS) -o $(builddir)/exec-stream-test $(builddir)/exec-stream-test.o $(builddir)/exec-stream.o -lpthread
+	$(CC) $(CFLAGS) -o $(builddir)/exec-stream-test -pthread $(builddir)/exec-stream-test.o $(builddir)/exec-stream.o -lpthread
 
